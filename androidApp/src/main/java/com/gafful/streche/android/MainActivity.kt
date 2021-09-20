@@ -6,9 +6,8 @@ import com.gafful.streche.Greeting
 import android.widget.TextView
 import com.gafful.streche.DatabaseDriverFactory
 import com.gafful.streche.ScoreRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 fun greet(): String {
     return Greeting().greeting()
@@ -24,14 +23,12 @@ class MainActivity : AppCompatActivity() {
 
         val repository = ScoreRepository(DatabaseDriverFactory(this))
 
-        runBlocking {
-            withContext(Dispatchers.IO) {
-                repository.add(true)
-                val launches = repository.getLaunches(true)
-                launches.forEach {
-                    println(it)
-                    println(it.missionName)
-                }
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.add(true)
+            val launches = repository.getLaunches(true)
+            launches.forEach {
+                println(it)
+                println(it.missionName)
             }
         }
     }
