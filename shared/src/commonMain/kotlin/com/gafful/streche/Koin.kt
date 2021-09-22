@@ -2,6 +2,7 @@ package com.gafful.streche
 
 import com.gafful.streche.ktor.OpenTdbApi
 import com.gafful.streche.ktor.OpenTdbApiImpl
+import com.squareup.sqldelight.ColumnAdapter
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -25,10 +26,21 @@ fun initKoin(appModule: Module): KoinApplication {
     return koinApplication
 }
 
+val listOfStringsAdapter = object : ColumnAdapter<List<String>, String> {
+    override fun decode(databaseValue: String) =
+        if (databaseValue.isEmpty()) {
+            listOf()
+        } else {
+            databaseValue.split(",")
+        }
+    override fun encode(value: List<String>) = value.joinToString(separator = ",")
+}
+
 private val coreModule = module {
     single {
         DatabaseHelper(
             get(),
+            listOfStringsAdapter,
             getWith("DatabaseHelper"),
             Dispatchers.Default
         )

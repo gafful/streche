@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
+    id("kotlinx-serialization")
     id("com.squareup.sqldelight")
 }
 
@@ -14,6 +15,7 @@ val okhttp = "4.9.0"
 val ktor = "1.6.3"
 val koin = "3.0.2"
 val androidXtest = "1.3.0"
+val multiplatformSettings = "0.8"
 
 kotlin {
     android()
@@ -45,14 +47,18 @@ kotlin {
                 implementation("io.ktor:ktor-client-serialization:$ktor")
                 implementation("io.insert-koin:koin-core:$koin")
                 api("co.touchlab:kermit:0.1.9")
+                implementation("com.russhwolf:multiplatform-settings:$multiplatformSettings")
+                implementation("com.russhwolf:multiplatform-settings-serialization:$multiplatformSettings")
             }
         }
+
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
                 //implementation(kotlin("app.cash.turbine:turbine:0.5.2"))
                 implementation("io.ktor:ktor-client-mock:$ktor")
+                implementation("com.russhwolf:multiplatform-settings-test:$multiplatformSettings")
             }
         }
 

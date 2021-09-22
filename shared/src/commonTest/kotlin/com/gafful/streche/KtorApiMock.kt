@@ -1,11 +1,10 @@
 package com.gafful.streche
 
 import com.gafful.streche.ktor.OpenTdbApi
-import com.gafful.streche.opentdb.Response
+import com.gafful.streche.opentdb.OpenTdb
 import com.gafful.streche.response.BreedResult
 import io.ktor.client.engine.*
 import io.ktor.client.engine.mock.*
-import io.ktor.utils.io.*
 
 
 // TODO convert this to use Ktor's MockEngine
@@ -17,12 +16,12 @@ class KtorApiMock(mockEngine: MockEngine) : OpenTdbApi {
     var calledCount = 0
         private set
 
-    override suspend fun getCategories(): List<Response.Category> {
+    override suspend fun getCategories(): OpenTdb.CategoryResponseDto {
 
-        return listOf(Response.Category(1, "hope"))
+        return OpenTdb.CategoryResponseDto(listOf(OpenTdb.CategoryDto(1, "hope")))
     }
 
-    override suspend fun getTrivia(category: String, count: Int): Response.Trivia {
-        return emptyList<Response.Trivia>().get(0)
+    override suspend fun getTrivia(category: String, count: Int): OpenTdb.TriviaDto {
+        return emptyList<OpenTdb.TriviaDto>().get(0)
     }
 }

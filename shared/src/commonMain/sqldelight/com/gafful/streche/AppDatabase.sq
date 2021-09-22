@@ -1,18 +1,39 @@
-CREATE TABLE Launch (
-    flightNumber INTEGER NOT NULL,
-    missionName TEXT NOT NULL,
-    launchYear INTEGER AS Int NOT NULL DEFAULT 0,
-    details TEXT,
-    launchSuccess INTEGER AS Boolean DEFAULT NULL,
-    launchDateUTC TEXT NOT NULL
+import kotlin.collections.List;
+
+CREATE TABLE Trivia (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    category TEXT NOT NULL,
+    type TEXT NOT NULL,
+    difficulty TEXT NOT NULL,
+    question TEXT NOT NULL UNIQUE,
+    correct_answer TEXT NOT NULL,
+    incorrect_answers TEXT AS List<String> NOT NULL,
+    source TEXT NOT NULL,
+    answer TEXT,
+    answered_on TEXT
 );
 
-insertLaunch:
-INSERT INTO Launch(flightNumber, missionName, launchYear, details, launchSuccess, launchDateUTC)
-VALUES(?, ?, ?, ?, ?, ?);
+insertTrivia:
+INSERT INTO Trivia(id, category, type, difficulty, question, correct_answer, incorrect_answers, source, answer, answered_on)
+VALUES(?, ?, ?, ?, ?,?,?,?,?,?);
 
-removeAllLaunches:
-DELETE FROM Launch;
+selectAllTrivia:
+SELECT * FROM Trivia;
 
-selectAllLaunches:
-SELECT * FROM Launch;
+-- selectUnansweredTrivia:
+-- SELECT * FROM Trivia;
+--
+-- selectAnsweredTrivia:
+-- SELECT * FROM Trivia;
+--
+-- selectWronglyAnsweredTrivia:
+-- SELECT * FROM Trivia;
+--
+-- selectRightlyAnsweredTrivia:
+-- SELECT * FROM Trivia;
+--
+-- -- updateTrivia:
+-- -- UPDATE Trivia SET favorite = ? WHERE id = ?;
+--
+-- removeAllTrivia:
+-- DELETE FROM Trivia;
