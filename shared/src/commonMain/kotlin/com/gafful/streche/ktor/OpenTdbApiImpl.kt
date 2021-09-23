@@ -35,7 +35,7 @@ class OpenTdbApiImpl(log: Kermit, client: HttpClient) : OpenTdbApi {
         }
     }
 
-    override suspend fun getTrivia(category: String, count: Int): OpenTdb.TriviaDto {
+    override suspend fun getTrivia(category: String, count: Int): OpenTdb.TriviaResponseDto {
         log.d { "Fetching trivia from opentdb.com" }
         return client.get {
             opentdbapi("api.php")

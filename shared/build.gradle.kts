@@ -49,6 +49,7 @@ kotlin {
                 api("co.touchlab:kermit:0.1.9")
                 implementation("com.russhwolf:multiplatform-settings:$multiplatformSettings")
                 implementation("com.russhwolf:multiplatform-settings-serialization:$multiplatformSettings")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
             }
         }
 

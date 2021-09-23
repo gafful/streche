@@ -13,6 +13,7 @@ data class DataState<out T>(
 sealed class TriviaViewState {
     object Initial : TriviaViewState()
     object FetchingCategories : TriviaViewState()
+    object FetchingTrivia : TriviaViewState()
     data class RequestCategories(val categories: List<OpenTdb.CategoryDto>) : TriviaViewState()
     data class ShowTrivia(val categories: List<TriviaVo>) : TriviaViewState()
 }

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import co.touchlab.kermit.Kermit
 import com.gafful.streche.Greeting
 import com.gafful.streche.TriviaViewState
+import com.gafful.streche.opentdb.CategoryVo
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -44,5 +45,15 @@ class MainActivity : AppCompatActivity(), KoinComponent {
                 println(" we don't know ")
             }
         }
+
+//        viewModel.onCategoriesSelected(listOf(
+//            CategoryVo(32, "14"),
+//            CategoryVo(32, "15"),
+//            CategoryVo(32, "32"),
+//            CategoryVo(31, "31"),
+//        )
+//        )
+
+        viewModel.onTriviaAnswered(2L,"answer")
     }
 }

@@ -31,9 +31,9 @@ SELECT * FROM Trivia;
 --
 -- selectRightlyAnsweredTrivia:
 -- SELECT * FROM Trivia;
---
--- -- updateTrivia:
--- -- UPDATE Trivia SET favorite = ? WHERE id = ?;
---
+
+updateTrivia:
+UPDATE Trivia SET answer = ?, answered_on = ? WHERE id = ?;
+
 -- removeAllTrivia:
 -- DELETE FROM Trivia;

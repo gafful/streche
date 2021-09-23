@@ -21,7 +21,7 @@ class KtorApiMock(mockEngine: MockEngine) : OpenTdbApi {
         return OpenTdb.CategoryResponseDto(listOf(OpenTdb.CategoryDto(1, "hope")))
     }
 
-    override suspend fun getTrivia(category: String, count: Int): OpenTdb.TriviaDto {
-        return emptyList<OpenTdb.TriviaDto>().get(0)
+    override suspend fun getTrivia(category: String, count: Int): OpenTdb.TriviaResponseDto {
+        return emptyList<OpenTdb.TriviaResponseDto>()[0]
     }
 }

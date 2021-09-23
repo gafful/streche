@@ -4,15 +4,13 @@ import com.gafful.streche.ktor.OpenTdbApi
 import com.gafful.streche.ktor.OpenTdbApiImpl
 import com.squareup.sqldelight.ColumnAdapter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.datetime.Clock
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
-
-//@Suppress("CanBePrimaryConstructorProperty")
-//private val log = log
 
 fun initKoin(appModule: Module): KoinApplication {
     val koinApplication = startKoin {
@@ -51,9 +49,9 @@ private val coreModule = module {
             HttpClients(getWith("OpenTdbApiImpl")).client
         )
     }
-//    single<Clock> {
-//        Clock.System
-//    }
+    single<Clock> {
+        Clock.System
+    }
 }
 
 internal inline fun <reified T> Scope.getWith(vararg params: Any?): T {

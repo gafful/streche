@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Kermit
 import com.gafful.streche.TriviaModel
 import com.gafful.streche.TriviaViewState
+import com.gafful.streche.opentdb.CategoryVo
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -57,6 +58,24 @@ class SetupViewModel : ViewModel(), KoinComponent {
 ////                    _triviaStateFlow.value = dataState
 ////                }
 //            }
+        }
+    }
+
+    fun onCategoriesSelected(categories: List<CategoryVo>) {
+        scope.launch {
+            log.v { "onCategoriesSelected ..." }
+            triviaModel.onCategoriesSelected(categories).collect {
+                println("state-in: $it")
+            }
+        }
+    }
+
+    fun onTriviaAnswered(id: Long, answer: String) {
+        scope.launch {
+            log.v { "onCategoriesSelected ..." }
+            triviaModel.onTriviaAnswered(id, answer).collect {
+                //println("state-in: $it")
+            }
         }
     }
 }

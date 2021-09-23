@@ -16,14 +16,12 @@
 # Issues
 
 # Next
+Tests
 compose
 splash-setup-trivia
-business logic w/ tests
-- get categories
-- save selected categor(ies) = db/prefs
-- initdb with selection
-- fetch question
-- record score
+record score
+update answer
+
 
 # Question
 Does UNIQUE make a column indexed?
@@ -34,6 +32,11 @@ answered_on TEXT date
 How does sealed work
 return flow from ktor?
 stateflow vs livedata
+A resource failed to call close.
+CategoryResponseDto(triviaCategories=[CategoryDto(id=9, name=General Knowledge)])
+- varargs
+- handle network errors and other edge cases ...
+
 
 
 # Trivia APIs

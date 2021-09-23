@@ -15,6 +15,13 @@ class OpenTdb {
     data class CategoryDto(val id: Int, val name: String)
 
     @Serializable
+    data class TriviaResponseDto(
+        @SerialName("response_code")
+        val responseCode: Int,
+        val results: List<TriviaDto>
+    )
+
+    @Serializable
     data class TriviaDto(
         val category: String,
         val type: String,
@@ -25,7 +32,24 @@ class OpenTdb {
         @SerialName("incorrect_answers")
         val incorrectAnswers: List<String>,
     )
+
+    enum class ResponseCodes(i: Int) {
+        SUCCESS(0),
+        //Could not return results. The API doesn't have enough questions for your query.
+        // (Ex. Asking for 50 Questions in a Category that only has 20.)
+        NO_RESULTS(1),
+        //  Contains an invalid parameter. Arguements passed in aren't valid. (Ex. Amount = Five)
+        INVALID_PARAMETER(2),
+        // Session Token does not exist.
+        TOKEN_NOT_FOUND(3),
+        // Session Token has returned all possible questions for the specified query.
+        // Resetting the Token is necessary.
+        TOKEN_EMPTY(4),
+    }
 }
+
+@Serializable
+data class CategoryVo(val id: Int, val name: String)
 
 class WillFry {
     //data class CategoryDto(val id: Int, val name: String)
@@ -39,7 +63,7 @@ class WillFry {
 }
 
 // category, difficulty,
-enum class Difficulty
+//enum class Difficulty
 
 fun Trivia.toTriviaVo() = TriviaVo(
     this.category,
@@ -48,6 +72,15 @@ fun Trivia.toTriviaVo() = TriviaVo(
     this.question,
     this.correct_answer,
     this.incorrect_answers
+)
+
+fun OpenTdb.TriviaDto.toTriviaVo() = TriviaVo(
+    this.category,
+    this.type,
+    this.difficulty,
+    this.question,
+    this.correctAnswer,
+    this.incorrectAnswers,
 )
 
 data class TriviaVo(
