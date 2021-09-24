@@ -16,11 +16,45 @@
 # Issues
 
 # Next
-Tests
+Fix the enum by param thing
+Tests | PeopleInSpaceTest, 
 compose
 splash-setup-trivia
 record score
 update answer
+
+Kampit: Good
+MoneyFlow: Good
+PeopleInSpace: 1 test: PeopleInSpaceTest
+RSSReader: No Tests
+KMP_MVVM: Mocks
+KMM Networking & ... : No Tests
+
+
+Testing Principles
+- Use fakes or mocks for long operations; networking, hard to create configurations, ...
+- Use memory for db
+- You're not testing the bounds, so fake them, I guess.
+- Generally, use real objects. They're better than test doubles like fakes & mocks
+- If Object under test is a data object, use real objects
+- If object cannot function unless it communicates with the real object of a dependency, use real objects
+- If it's hard to replicate the object's communication with a dependency, use real objects.
+- In other words, if it's simple, use the real objects.
+- So since db is hard to replicate the communication, use a real in memory db instead of a fake db results!
+- Ah, but those are also not the things we're testing so why allow them to slow/use them much, just mock them, or?
+- In general, don't mock instances I don't own. They're brittle. Use these mocks as a last resort.
+- so the anti-mock guy is like, since code evolves, and u can't keep updating mocks, just use the real thing b4 tests break.
+
+
+- simply return what you expect using your real dependencies unless they need to be mocked!
+- easily control what you want them to return, they're not the object under test!
+
+
+Mock when
+- long running op like file processing
+- connecting to an open port
+- hard to create configurations
+
 
 
 # Question

@@ -12,6 +12,7 @@ import io.ktor.util.date.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
 
 //TODO: Change to DatabaseService
@@ -19,7 +20,7 @@ class DatabaseHelper(
     sqlDriver: SqlDriver,
     incorrectAnswersAdapter: ColumnAdapter<List<String>, String>,
     private val log: Kermit,
-    private val backgroundDispatcher: CoroutineDispatcher
+    private val backgroundDispatcher: CoroutineDispatcher,
 ) {
     private val dbRef: AppDatabase = AppDatabase(sqlDriver, Trivia.Adapter(incorrectAnswersAdapter))
 
@@ -29,6 +30,13 @@ class DatabaseHelper(
             .asFlow()
             .mapToList()
             .flowOn(backgroundDispatcher)
+
+
+    suspend fun getTriviaById(id: Long): Trivia? =
+        withContext(backgroundDispatcher) {
+            return@withContext dbRef.appDatabaseQueries.getTriviaById(id)
+                .executeAsOneOrNull()
+        }
 
     suspend fun insertTrivia(items: List<OpenTdb.TriviaDto>) {
         log.d { "Inserting ${items.size} trivia into database" }
@@ -54,6 +62,13 @@ class DatabaseHelper(
         log.i { "Trivia $id: Answer $answer" }
         dbRef.transactionWithContext(backgroundDispatcher) {
             dbRef.appDatabaseQueries.updateTrivia(answer, time.toString(), id)
+        }
+    }
+
+    suspend fun deleteAllTrivia() {
+        log.i { "Database Cleared" }
+        dbRef.transactionWithContext(backgroundDispatcher) {
+            dbRef.appDatabaseQueries.deleteAllTrivia()
         }
     }
 }

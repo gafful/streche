@@ -73,9 +73,9 @@ class SetupViewModel : ViewModel(), KoinComponent {
     fun onTriviaAnswered(id: Long, answer: String) {
         scope.launch {
             log.v { "onCategoriesSelected ..." }
-            triviaModel.onTriviaAnswered(id, answer).collect {
+            triviaModel.onTriviaAnswered(id, answer)
                 //println("state-in: $it")
-            }
+
         }
     }
 }

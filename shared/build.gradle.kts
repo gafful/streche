@@ -57,9 +57,9 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
-                //implementation(kotlin("app.cash.turbine:turbine:0.5.2"))
                 implementation("io.ktor:ktor-client-mock:$ktor")
                 implementation("com.russhwolf:multiplatform-settings-test:$multiplatformSettings")
+                implementation("app.cash.turbine:turbine:0.5.2")
             }
         }
 
@@ -72,6 +72,7 @@ kotlin {
             dependencies {
                 implementation("com.squareup.okhttp3:okhttp:$okhttp")
                 implementation("com.squareup.sqldelight:android-driver:$sqlDelight")
+                implementation("com.squareup.sqldelight:sqlite-driver:$sqlDelight")
                 //implementation("io.ktor:ktor-client-android:$ktor")
                 implementation("io.ktor:ktor-client-okhttp:$ktor")
             }

@@ -5,16 +5,11 @@ import com.gafful.streche.ktor.OpenTdbApi
 import com.gafful.streche.opentdb.CategoryVo
 import com.gafful.streche.opentdb.OpenTdb
 import com.gafful.streche.opentdb.toTriviaVo
-import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.Settings
-import com.russhwolf.settings.serialization.decodeValue
-import com.russhwolf.settings.serialization.encodeValue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.Clock
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.builtins.ListSerializer
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
@@ -34,54 +29,26 @@ class TriviaModel : KoinComponent {
 //        ensureNeverFrozen()
     }
 
-    @ExperimentalSettingsApi
-    @ExperimentalSerializationApi
     fun initSession(): Flow<TriviaViewState> = flow {
-        log.v { "initSession:" }
+        log.d { "Initialize session:" }
         //TODO: Get say 50 at a time
-        dbHelper.getAllTrivia().collect { listItems ->
+        getAllTrivia().collect { listItems ->
             if (listItems.toList().isEmpty()) {
-                log.v { "isEmpty:" }
-                val categories = settings.decodeValue(
-                    ListSerializer(OpenTdb.CategoryDto.serializer()),
-                    "categories",
-                    emptyList())
-                log.v { "categories: $categories" }
-                if (categories.isEmpty()) {
-                    emit(TriviaViewState.FetchingCategories)
-                    val categoriesResponse = openTdbApi.getCategories()
-                    println("categoriesResponse: $categoriesResponse")
-                    emit(TriviaViewState.RequestCategories(categoriesResponse.triviaCategories))
-                } else {
-                    emit(TriviaViewState.RequestCategories(categories))
-                }
+                log.i { "No trivia in database:" }
+                val categoriesResponse = openTdbApi.getCategories()
+                emit(TriviaViewState.RequestCategories(categoriesResponse.triviaCategories))
             } else {
-                log.v { "isNOT Empty:" }
-                log.v { "itemList:" }
-                log.v { "itemList: $listItems" }
                 emit(TriviaViewState.ShowTrivia(listItems.map { it.toTriviaVo() }))
             }
         }
     }
 
-//    fun fetchTrivia(categories: List<CategoryVo>): Flow<TriviaViewState> = flow {
-//
-//    }
-
-    @ExperimentalSettingsApi
-    @ExperimentalSerializationApi
     suspend fun onCategoriesSelected(categories: List<CategoryVo>): Flow<TriviaViewState> = flow {
-
-        println("onCategoriesSelected1: $categories")
+        log.d { "On categories selected: $categories" }
         emit(TriviaViewState.FetchingTrivia)
-        settings.encodeValue(
-            ListSerializer(OpenTdb.CategoryDto.serializer()),
-            "categories",
-            emptyList())
 
         //TODO Restrict to 5 at a time
         val results: MutableList<OpenTdb.TriviaDto> = mutableListOf()
-
         for (it in categories) {
             val triviaResponse = openTdbApi.getTrivia(it.name, 5)
             when (triviaResponse.responseCode) {
@@ -109,13 +76,26 @@ class TriviaModel : KoinComponent {
 
                 }
             }
-            kotlinx.coroutines.delay(500)
+            // TODO: Restore?
+            //kotlinx.coroutines.delay(500)
         }
+        // TODO: Extract
         dbHelper.insertTrivia(results)
         emit(TriviaViewState.ShowTrivia(results.map { it.toTriviaVo() }))
     }
 
-    fun onTriviaAnswered(id: Long, answer: String): Flow<TriviaViewState> = flow{
+    suspend fun onTriviaAnswered(id: Long, answer: String)  {
+        // TODO: Exception or nothing!
         dbHelper.updateTrivia(id, answer, clock.now())
+    }
+
+    // TODO: Move to repository?
+     fun getAllTrivia(): Flow<List<Trivia>> {
+        return dbHelper.getAllTrivia()
+    }
+
+    // TODO: Move to repository?
+    suspend fun getTriviaById(id: Long): Trivia? {
+        return dbHelper.getTriviaById(id)
     }
 }
